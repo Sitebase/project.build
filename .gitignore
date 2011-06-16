@@ -1,0 +1,23 @@
+*.DS_Store
+
+# Exclude textmate project files
+*.tmproj
+
+# Exclude project files
+*/.idea
+*.idea
+*.project
+*.settings/
+*.buildpath
+
+# Exclude logs
+*log
+*logs
+
+# Exclude cache
+*cache
+
+# Builds
+*builds
+*release
+*Preview.zip

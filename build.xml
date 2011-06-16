@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Build" default="build" basedir=".">
+	
+	<!-- Set execution plan -->
+	<target name="build" depends="clean,build_default"/>
+
+	<!-- Project info -->
+	<property file="./build.properties"/>
+	<tstamp prefix="timer">
+		<format property="date" pattern="d-MM-yyyy" locale="be" />
+		<format property="time" pattern="hh:mm:ss a z" locale="be" />
+	</tstamp>
+	
+	<!-- Create clean project name -->
+	<pathconvert property="build.project.id" dirsep="" pathsep="">
+		<path path="${build.project}" />
+		<map from="${basedir}" to="" />
+		<chainedmapper>
+			<flattenmapper/>
+			<filtermapper>
+				<replacestring from=" " to=""/>     
+			</filtermapper>
+			<scriptmapper language="javascript">
+				self.addMappedName(source.toLowerCase());
+			</scriptmapper>
+		</chainedmapper>
+	</pathconvert>
+
+	<!-- Create bool for custom replaces -->
+	<condition property="customreplace1">
+			<equals arg1="${build.find1}" arg2="" trim="true"/>
+	</condition>
+	<condition property="customreplace2">
+			<equals arg1="${build.find2}" arg2="" trim="true"/>
+	</condition>
+	<condition property="customreplace3">
+			<equals arg1="${build.find3}" arg2="" trim="true"/>
+	</condition>
+
+
+
+	<!-- Delete temp files (temp, cache, log, previous publish) -->
+  	<target name="clean">
+		<echo message="Cleanup project"/>
+		<delete dir="${dir.publish}/"/>
+	</target>
+
+	<!-- Copy files -->
+	<target name="copy_default">
+		<echo message="Make new release ${timer.time}"/>
+		<copy todir="${dir.publish}/${build.project.id}" overwrite="true">
+			<fileset dir="${dir.source}" excludesfile="${dir.build}/build.excludes"/>
+		</copy>
+	</target>
+	<target name="copy_wordpress">
+		<echo message="Make new release ${timer.time}"/>
+		<copy todir="${dir.publish}/${build.project.id}" overwrite="true">
+			<fileset dir="${dir.source}" excludesfile="${dir.build}/build.excludes">
+				<exclude name="**/documentation/" />
+			</fileset>
+		</copy>
+		<copy todir="${dir.publish}/documentation" overwrite="true">
+			<fileset dir="${dir.source}/documentation" />
+		</copy>
+	</target>
+
+
+	<!-- Do variables replacement in the source files -->
+	<target name="replace" depends="replace1">
+		<echo message="Replace strings in source" />
+		<replace dir="${dir.publish}" token="${version}" value="${build.version}"/>
+		<replace dir="${dir.publish}" token="${company}" value="${build.user.company}"/>
+		<replace dir="${dir.publish}" token="${site}" value="${build.user.site}"/>
+		<replace dir="${dir.publish}" token="${email}" value="${build.user.email}"/>
+		<replace dir="${dir.publish}" token="${project}" value="${build.project}"/>
+		<replace dir="${dir.publish}" token="${date}" value="${timer.date}"/>
+		<replace dir="${dir.publish}" token="${copyright}" value="${build.copyright}"/>
+		<replace dir="${dir.publish}" token="${license}" value="${build.license}"/>
+	</target>
+
+	<!-- Custom replaces -->
+	<target name="replace1" unless="customreplace1" depends="replace2">
+		<echo message="Exec custom replace 1"/>
+		<replace dir="${dir.publish}" token="${build.find1}" value="${build.replace1}"/>
+	</target>
+	<target name="replace2" unless="customreplace2" depends="replace3">
+		<echo message="Exec custom replace 2"/>
+		<replace dir="${dir.publish}" token="${build.find2}" value="${build.replace2}"/>
+	</target>
+	<target name="replace3" unless="customreplace3">
+		<echo message="Exec custom replace 3"/>
+		<replace dir="${dir.publish}" token="${build.find3}" value="${build.replace3}"/>
+	</target>
+
+	<!-- Build the script -->
+	<target name="build_default" depends="copy_default,replace">
+		<echo message="Archiving release"/>
+		<zip destfile="${dir.publish}/${build.project.id}.zip" basedir="${dir.publish}/${build.project.id}" update="true" />
+	</target>
+	<target name="build_wordpress" depends="copy_wordpress,replace">
+		<echo message="Archiving WordPress plugin"/>
+		<zip destfile="${dir.publish}/${build.project.id}.zip" basedir="${dir.publish}" update="true" />
+	</target>
+
+</project>
+
+

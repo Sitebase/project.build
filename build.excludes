@@ -1,0 +1,35 @@
+# Global
+**/.gitignore
+**/.svn
+**/.git
+**/cache/*
+**/*.log
+**/log/*.php
+**/logs/*.php
+**/.DS_Store
+**/build/
+**/release/
+**/build.properties
+**/config_ftp.ini
+**/dev.config.*
+**/_config.ini
+**/Preview/
+**/documentation.pdf
+**/documents/
+**/temp/*
+**/.buildpath/
+**/.externalToolBuilders/
+**/.settings
+**/build.xml
+**/LivePreview/
+**/prepared
+**/version
+**/backup/
+
+# Project specific
+**/GoogleMaps/
+**/Optimizer/
+**/TwitterWall/
+**/mybusiness/
+**/mymagazine/
+**/photographer/
