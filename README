@@ -1,0 +1,22 @@
+Setup
+-----
+
+The best way to do this is create a directory structure like this:
+
+- build (clone of this git)
+- documents (extra documents like PSD, doc, txt files that don't need to be included in the build)
+- src (all the project files
+   |
+	|- documentation (directory with documentation files
+	|- script (your script files)
+
+Settings
+--------
+
+Change the build.properties file to work with this script:
+
+dir.build: You'll don't need to edit this
+dir.source: The path to your project source files
+dir.publish: In what directory you want to create a release zip
+
+
