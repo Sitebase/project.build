@@ -4,6 +4,7 @@
 **/.git
 **/cache/*
 **/*.log
+**/*.swp
 **/log/*.php
 **/logs/*.php
 **/.DS_Store
