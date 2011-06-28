@@ -55,12 +55,7 @@
 	<target name="copy_wordpress">
 		<echo message="Make new release ${timer.time}"/>
 		<copy todir="${dir.publish}/${build.project.id}" overwrite="true">
-			<fileset dir="${dir.source}" excludesfile="${dir.build}/build.excludes">
-				<exclude name="**/documentation/" />
-			</fileset>
-		</copy>
-		<copy todir="${dir.publish}/documentation" overwrite="true">
-			<fileset dir="${dir.source}/documentation" />
+			<fileset dir="${dir.source}" excludesfile="${dir.build}/build.excludes"/>
 		</copy>
 	</target>
 
@@ -99,7 +94,7 @@
 	</target>
 	<target name="build_wordpress" depends="copy_wordpress,replace">
 		<echo message="Archiving WordPress plugin"/>
-		<zip destfile="${dir.publish}/${build.project.id}.zip" basedir="${dir.publish}" update="true" />
+		<zip destfile="${dir.publish}/${build.project.id}.zip" basedir="${dir.publish}/${build.project.id}" update="true" />
 	</target>
 
 </project>
